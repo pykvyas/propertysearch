@@ -1,0 +1,82 @@
+<div class="app">
+  <header>
+    <div class="header-inner">
+      <h1>Property Explorer</h1>
+      <p>Find the right home using simple, powerful filters.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="filters">
+      <div class="field">
+        <label for="city">City</label>
+        <select id="city" [ngModel]="city()" (ngModelChange)="city.set($event)">
+          <option value="">All cities</option>
+          <option value="Apex">Apex</option>
+          <option value="Cary">Cary</option>
+          <option value="Raleigh">Raleigh</option>
+          <option value="Morrisville">Morrisville</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="minPrice">Min Price</label>
+        <input id="minPrice" type="number" placeholder="$250,000"
+               [ngModel]="minPrice()" (ngModelChange)="minPrice.set($event || null)">
+      </div>
+
+      <div class="field">
+        <label for="maxPrice">Max Price</label>
+        <input id="maxPrice" type="number" placeholder="$900,000"
+               [ngModel]="maxPrice()" (ngModelChange)="maxPrice.set($event || null)">
+      </div>
+
+      <div class="field">
+        <label for="minBedrooms">Min Bedrooms</label>
+        <select id="minBedrooms" [ngModel]="minBedrooms()" (ngModelChange)="minBedrooms.set($event ? +$event : null)">
+          <option [ngValue]="null">Any</option>
+          <option [ngValue]="1">1+</option>
+          <option [ngValue]="2">2+</option>
+          <option [ngValue]="3">3+</option>
+          <option [ngValue]="4">4+</option>
+          <option [ngValue]="5">5+</option>
+        </select>
+      </div>
+
+      <button class="primary" type="button" (click)="applyFilters()">Apply Filters</button>
+    </section>
+
+    <div class="summary">
+      <div>
+        <strong>{{ filteredProperties().length }} {{ filteredProperties().length === 1 ? 'Property' : 'Properties' }}</strong>
+        <span> matching your criteria</span>
+      </div>
+      <button class="secondary" type="button" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <section class="grid" *ngIf="filteredProperties().length; else emptyState">
+      <article class="card" *ngFor="let property of filteredProperties(); trackBy: trackById">
+        <div class="photo">
+          <span class="tag">{{ property.type }}</span>
+          {{ property.icon }}
+        </div>
+        <div class="content">
+          <div class="price">{{ property.price | currency:'USD':'symbol':'1.0-0' }}</div>
+          <div class="address">{{ property.address }}, {{ property.city }}, NC</div>
+          <div class="facts">
+            <span><b>{{ property.bedrooms }}</b> beds</span>
+            <span><b>{{ property.baths }}</b> baths</span>
+            <span><b>#{{ property.id }}</b></span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <ng-template #emptyState>
+      <div class="empty">
+        No properties match the selected filters.<br>
+        Try widening your price range or reducing the bedroom requirement.
+      </div>
+    </ng-template>
+  </main>
+</div>
