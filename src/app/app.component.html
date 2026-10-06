@@ -2,7 +2,7 @@
   <header>
     <div class="header-inner">
       <h1>Property Explorer</h1>
-      <p>Find the right home using simple, powerful filters.</p>
+      <p>Explore current listings from Northern Virginia.</p>
     </div>
   </header>
 
@@ -12,10 +12,7 @@
         <label for="city">City</label>
         <select id="city" [ngModel]="city()" (ngModelChange)="city.set($event)">
           <option value="">All cities</option>
-          <option value="Apex">Apex</option>
-          <option value="Cary">Cary</option>
-          <option value="Raleigh">Raleigh</option>
-          <option value="Morrisville">Morrisville</option>
+          <option *ngFor="let cityOption of cities()" [value]="cityOption">{{ cityOption }}</option>
         </select>
       </div>
 
@@ -46,6 +43,10 @@
       <button class="primary" type="button" (click)="applyFilters()">Apply Filters</button>
     </section>
 
+    <div class="empty" *ngIf="loading()">Loading listings...</div>
+    <div class="empty" *ngIf="error()">{{ error() }}</div>
+
+    <ng-container *ngIf="!loading() && !error()">
     <div class="summary">
       <div>
         <strong>{{ filteredProperties().length }} {{ filteredProperties().length === 1 ? 'Property' : 'Properties' }}</strong>
@@ -58,15 +59,15 @@
       <article class="card" *ngFor="let property of filteredProperties(); trackBy: trackById">
         <div class="photo">
           <span class="tag">{{ property.type }}</span>
-          {{ property.icon }}
+          <span class="photo-city">{{ property.city }}</span>
         </div>
         <div class="content">
           <div class="price">{{ property.price | currency:'USD':'symbol':'1.0-0' }}</div>
-          <div class="address">{{ property.address }}, {{ property.city }}, NC</div>
+          <div class="address">{{ property.address }}, {{ property.city }}</div>
           <div class="facts">
             <span><b>{{ property.bedrooms }}</b> beds</span>
             <span><b>{{ property.baths }}</b> baths</span>
-            <span><b>#{{ property.id }}</b></span>
+            <span>Listing <b>#{{ property.id }}</b></span>
           </div>
         </div>
       </article>
@@ -78,5 +79,6 @@
         Try widening your price range or reducing the bedroom requirement.
       </div>
     </ng-template>
+    </ng-container>
   </main>
 </div>

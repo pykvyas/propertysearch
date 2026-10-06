@@ -6,5 +6,4 @@ export interface Property {
   city: string;
   address: string;
   type: string;
-  icon: string;
 }

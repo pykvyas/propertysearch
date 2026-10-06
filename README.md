@@ -19,12 +19,9 @@ npm start
 
 Then open http://localhost:4200.
 
-## Connect to your .NET API
+## Listings API
 
-Replace the sample `properties` array in `src/app/app.component.ts` with an Angular service using `HttpClient`.
+The app loads listings with Angular `HttpClient` from `GET /api/properties`. The Angular dev server proxies this request to `http://localhost:5000` using `proxy.conf.json`, avoiding cross-origin browser requests.
 
-Example API endpoint:
+Start the API on port 5000 before running the Angular app. The response fields are defined by `Property` in `src/app/property.model.ts`.
 
-`GET /api/properties?minPrice=400000&maxPrice=800000&minBedrooms=3&city=Apex`
-
-The API response should map to the `Property` interface in `src/app/property.model.ts`.
